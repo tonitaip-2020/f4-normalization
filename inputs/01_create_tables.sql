@@ -1,10 +1,3 @@
---------------------------------------
--- nfnf (flat):
---------------------------------------
--- This is more of a curiosity and can be skipped
--- Populating this table will take several hundred GBs.
--- Other schemas take about 20 GB each.
-
 -- Clean title.principals.characters:
 UPDATE public.title_principals
 SET characters = TRANSLATE(characters, '[', '');
@@ -13,44 +6,52 @@ SET characters = TRANSLATE(characters, ']', '');
 UPDATE public.title_principals
 SET characters = TRANSLATE(characters, '"', '');
 
-DROP TABLE IF EXISTS nfnf.title_basics;
+-- Drop the indices that are not used by the benchmark:
+DROP INDEX public.title_idx;
 
-CREATE TABLE nfnf.title_basics (
-  tconst             VARCHAR
-, genres             VARCHAR
-, ordering_aka       NUMERIC -- from title_aka
-, title              VARCHAR
-, titletype          VARCHAR
-, isoriginaltitle    BOOLEAN --from title_aka
--- does not need "primarytitle" or "originaltitle" anymore
-, region             VARCHAR
-, language           VARCHAR
-, types              VARCHAR --from title_aka
-, attributes         VARCHAR --from title_aka
-, isadult            BOOLEAN
-, startyear          NUMERIC
-, endyear            NUMERIC
-, runtimeminutes     VARCHAR
-, averagerating      NUMERIC --from title_ratings
-, numvotes           NUMERIC --from title_ratings
-, directors          VARCHAR --from title_crew
-, writers            VARCHAR --from title_crew
-, nconst             VARCHAR --from title_principals
-, ordering_pri       NUMERIC --from title_principals
-, category           VARCHAR --from title_principals
-, job                VARCHAR --from title_principals
-, characters         VARCHAR --from title_principals 
--- does not need "parentconst" anymore
-, seasonnumber       VARCHAR --from title_episode
-, episodenumber      VARCHAR --from title_episode
-, primaryname        VARCHAR --from name_basics
-, birthyear          NUMERIC --from name_basics
-, deathyear          NUMERIC --from name_basics
-, primaryprofessions VARCHAR --from name_basics
-, knownfortitles     VARCHAR --from name_basics
-);
+--------------------------------------
+-- nfnf (flat):
+--------------------------------------
+-- This is more of a curiosity and should be skipped
+-- Populating this table will take several hundred GBs.
+-- Other schemas some dozens of GBs each.
 
-SELECT 'Created the firstnf schema' AS status;
+-- DROP TABLE IF EXISTS nfnf.title_basics;
+
+-- CREATE TABLE nfnf.title_basics (
+--   tconst             VARCHAR
+-- , genres             VARCHAR
+-- , ordering_aka       NUMERIC -- from title_aka
+-- , title              VARCHAR
+-- , titletype          VARCHAR
+-- , isoriginaltitle    BOOLEAN --from title_aka
+-- -- does not need "primarytitle" or "originaltitle" anymore
+-- , region             VARCHAR
+-- , language           VARCHAR
+-- , types              VARCHAR --from title_aka
+-- , attributes         VARCHAR --from title_aka
+-- , isadult            BOOLEAN
+-- , startyear          NUMERIC
+-- , endyear            NUMERIC
+-- , runtimeminutes     VARCHAR
+-- , averagerating      NUMERIC --from title_ratings
+-- , numvotes           NUMERIC --from title_ratings
+-- , directors          VARCHAR --from title_crew
+-- , writers            VARCHAR --from title_crew
+-- , nconst             VARCHAR --from title_principals
+-- , ordering_pri       NUMERIC --from title_principals
+-- , category           VARCHAR --from title_principals
+-- , job                VARCHAR --from title_principals
+-- , characters         VARCHAR --from title_principals 
+-- -- does not need "parentconst" anymore
+-- , seasonnumber       VARCHAR --from title_episode
+-- , episodenumber      VARCHAR --from title_episode
+-- , primaryname        VARCHAR --from name_basics
+-- , birthyear          NUMERIC --from name_basics
+-- , deathyear          NUMERIC --from name_basics
+-- , primaryprofessions VARCHAR --from name_basics
+-- , knownfortitles     VARCHAR --from name_basics
+-- );
 
 --------------------------------------
 -- firstnf:
