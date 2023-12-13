@@ -1,0 +1,17 @@
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=1081.09..1081.79 rows=282 width=25) (actual time=0.082..0.084 rows=0 loops=1)
+   Sort Key: te.seasonnumber, te.episodenumber
+   Sort Method: quicksort  Memory: 25kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+   ->  Nested Loop  (cost=0.87..1069.58 rows=282 width=25) (actual time=0.055..0.055 rows=0 loops=1)
+         ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.43..8.46 rows=1 width=30) (actual time=0.054..0.054 rows=0 loops=1)
+               Index Cond: ((tconst)::text = $0)
+               Filter: ((titletype)::text = 'tvSeries'::text)
+         ->  Index Scan using title_episode_parenttconst_idx on title_episode te  (cost=0.43..1058.31 rows=282 width=15) (never executed)
+               Index Cond: ((parenttconst)::text = $0)
+ Planning Time: 0.644 ms
+ Execution Time: 0.135 ms
+(13 rows)
+

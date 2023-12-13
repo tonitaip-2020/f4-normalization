@@ -1,0 +1,54 @@
+                                                                                          QUERY PLAN                                                                                           
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=1342.85..1483.25 rows=14040 width=95) (actual time=4.333..4.375 rows=8 loops=1)
+   Group Key: ta.title, tb.startyear, tb.runtimeminutes, tg.genre, tb.averagerating, nb_d.primaryname, nb_w.primaryname, nb_a.primaryname, tc."character"
+   Batches: 1  Memory Usage: 433kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.023..0.024 rows=1 loops=1)
+   ->  Nested Loop Left Join  (cost=81.06..1026.92 rows=14040 width=95) (actual time=3.695..4.312 rows=8 loops=1)
+         ->  Hash Right Join  (cost=80.49..581.57 rows=14040 width=91) (actual time=3.672..4.281 rows=8 loops=1)
+               Hash Cond: ((tc.tconst)::text = (tb.tconst)::text)
+               ->  Nested Loop Left Join  (cost=1.12..344.16 rows=39 width=36) (actual time=1.053..1.645 rows=4 loops=1)
+                     ->  Index Scan using title_characters_tconst_idx on title_characters tc  (cost=0.56..9.25 rows=39 width=32) (actual time=0.695..0.697 rows=4 loops=1)
+                           Index Cond: ((tconst)::text = $0)
+                     ->  Index Scan using name_basics_idx on name_basics nb_a  (cost=0.56..8.58 rows=1 width=24) (actual time=0.235..0.236 rows=1 loops=4)
+                           Index Cond: ((nconst)::text = (tc.nconst)::text)
+               ->  Hash  (cost=74.87..74.87 rows=360 width=75) (actual time=2.602..2.606 rows=2 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                     ->  Hash Left Join  (cost=11.29..74.87 rows=360 width=75) (actual time=2.589..2.599 rows=2 loops=1)
+                           Hash Cond: ((tb.tconst)::text = (tw.tconst)::text)
+                           ->  Nested Loop Left Join  (cost=2.55..61.99 rows=36 width=65) (actual time=2.017..2.024 rows=2 loops=1)
+                                 Join Filter: ((tb.tconst)::text = (tg.tconst)::text)
+                                 ->  Nested Loop Left Join  (cost=1.99..52.69 rows=9 width=58) (actual time=1.301..1.306 rows=1 loops=1)
+                                       Join Filter: ((tb.tconst)::text = (ta.tconst)::text)
+                                       ->  Nested Loop Left Join  (cost=1.43..42.74 rows=3 width=37) (actual time=1.209..1.211 rows=1 loops=1)
+                                             ->  Nested Loop Left Join  (cost=0.87..16.98 rows=3 width=33) (actual time=0.861..0.863 rows=1 loops=1)
+                                                   Join Filter: ((tb.tconst)::text = (td.tconst)::text)
+                                                   ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.43..8.45 rows=1 width=23) (actual time=0.281..0.282 rows=1 loops=1)
+                                                         Index Cond: ((tconst)::text = $0)
+                                                   ->  Index Scan using title_directors_idx on title_directors td  (cost=0.43..8.48 rows=3 width=20) (actual time=0.576..0.576 rows=1 loops=1)
+                                                         Index Cond: ((tconst)::text = $0)
+                                             ->  Index Scan using name_basics_idx on name_basics nb_d  (cost=0.56..8.58 rows=1 width=24) (actual time=0.346..0.346 rows=1 loops=1)
+                                                   Index Cond: ((nconst)::text = (td.director)::text)
+                                       ->  Materialize  (cost=0.56..9.82 rows=3 width=31) (actual time=0.090..0.092 rows=1 loops=1)
+                                             ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..9.81 rows=3 width=31) (actual time=0.086..0.087 rows=1 loops=1)
+                                                   Index Cond: ((tconst)::text = $0)
+                                                   Filter: (isoriginaltitle IS TRUE)
+                                                   Rows Removed by Filter: 2
+                                 ->  Materialize  (cost=0.56..8.78 rows=4 width=17) (actual time=0.714..0.716 rows=2 loops=1)
+                                       ->  Index Scan using title_genres_idx on title_genres tg  (cost=0.56..8.76 rows=4 width=17) (actual time=0.710..0.711 rows=2 loops=1)
+                                             Index Cond: ((tconst)::text = $0)
+                           ->  Hash  (cost=8.61..8.61 rows=10 width=20) (actual time=0.556..0.556 rows=1 loops=1)
+                                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                 ->  Index Scan using title_writers_idx on title_writers tw  (cost=0.43..8.61 rows=10 width=20) (actual time=0.548..0.549 rows=1 loops=1)
+                                       Index Cond: ((tconst)::text = $0)
+         ->  Memoize  (cost=0.57..8.59 rows=1 width=24) (actual time=0.003..0.003 rows=1 loops=8)
+               Cache Key: tw.writer
+               Cache Mode: logical
+               Hits: 7  Misses: 1  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+               ->  Index Scan using name_basics_idx on name_basics nb_w  (cost=0.56..8.58 rows=1 width=24) (actual time=0.016..0.017 rows=1 loops=1)
+                     Index Cond: ((nconst)::text = (tw.writer)::text)
+ Planning Time: 15.734 ms
+ Execution Time: 4.893 ms
+(50 rows)
+

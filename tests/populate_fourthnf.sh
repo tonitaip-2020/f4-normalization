@@ -2,9 +2,8 @@
 
 export PGPASSWORD=imdb
 
-# Run powerstat for 31 minutes, measure in 0.5s intervals (31 * 60 * 2):
-# TODO: this must be higher
-sudo powerstat -cDHRf 0.5 3720 > ../outputs/powerstat_populate_fourthnf_$(date +%Y%m%d%H%M).txt &
+# Run powerstat for 60 minutes, measure in 0.5s intervals (60 * 60 * 2):
+sudo powerstat -cDHRf 0.5 7200 > ../outputs/powerstat_populate_firstnf_$(date +%Y%m%d%H%M).txt &
 
 # Capture the PID of the powerstat process
 powerstat_pid=$!

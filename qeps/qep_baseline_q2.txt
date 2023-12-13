@@ -1,0 +1,16 @@
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=9.10..93.49 rows=10 width=20) (actual time=0.218..0.224 rows=1 loops=1)
+   CTE kft
+     ->  ProjectSet  (cost=0.59..8.67 rows=10 width=32) (actual time=0.161..0.164 rows=1 loops=1)
+           InitPlan 1 (returns $0)
+             ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.037..0.038 rows=1 loops=1)
+           ->  Index Scan using name_basics_idx on name_basics nb  (cost=0.56..8.58 rows=1 width=18) (actual time=0.141..0.142 rows=1 loops=1)
+                 Index Cond: ((nconst)::text = $0)
+   ->  CTE Scan on kft  (cost=0.00..0.20 rows=10 width=32) (actual time=0.164..0.167 rows=1 loops=1)
+   ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.43..8.45 rows=1 width=30) (actual time=0.050..0.051 rows=1 loops=1)
+         Index Cond: ((tconst)::text = kft.title)
+ Planning Time: 0.501 ms
+ Execution Time: 0.283 ms
+(12 rows)
+

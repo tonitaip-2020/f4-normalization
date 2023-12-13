@@ -1,0 +1,25 @@
+                                                                               QUERY PLAN                                                                               
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=33741.35..33770.52 rows=250 width=26) (actual time=27.820..31.239 rows=250 loops=1)
+   ->  Gather Merge  (cost=33741.35..33783.35 rows=360 width=26) (actual time=27.818..31.230 rows=250 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Sort  (cost=32741.32..32741.77 rows=180 width=26) (actual time=23.196..23.200 rows=198 loops=3)
+               Sort Key: tr.averagerating DESC
+               Sort Method: top-N heapsort  Memory: 52kB
+               Worker 0:  Sort Method: top-N heapsort  Memory: 52kB
+               Worker 1:  Sort Method: top-N heapsort  Memory: 51kB
+               ->  Nested Loop  (cost=167.46..32734.58 rows=180 width=26) (actual time=1.747..22.682 rows=2113 loops=3)
+                     ->  Parallel Bitmap Heap Scan on title_ratings tr  (cost=167.03..8907.99 rows=2935 width=16) (actual time=1.633..5.423 rows=2589 loops=3)
+                           Recheck Cond: (numvotes > '25000'::numeric)
+                           Heap Blocks: exact=1200
+                           ->  Bitmap Index Scan on title_ratings_averagerating_idx  (cost=0.00..165.27 rows=7045 width=0) (actual time=3.528..3.528 rows=7767 loops=1)
+                                 Index Cond: (numvotes > '25000'::numeric)
+                     ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.43..8.11 rows=1 width=30) (actual time=0.006..0.006 rows=1 loops=7767)
+                           Index Cond: ((tconst)::text = (tr.tconst)::text)
+                           Filter: ((titletype)::text = 'movie'::text)
+                           Rows Removed by Filter: 0
+ Planning Time: 2.267 ms
+ Execution Time: 31.364 ms
+(21 rows)
+

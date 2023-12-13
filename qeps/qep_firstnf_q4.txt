@@ -1,0 +1,20 @@
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=2885.41..2953.71 rows=6830 width=45) (actual time=1.201..1.204 rows=0 loops=1)
+   Group Key: nb.primaryname, nb.birthyear, nb.deathyear, npt.primaryprofession, npt.knownfortitle
+   Batches: 1  Memory Usage: 225kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.008..0.009 rows=1 loops=1)
+   ->  Nested Loop Left Join  (cost=14.42..2800.00 rows=6830 width=45) (actual time=1.173..1.175 rows=0 loops=1)
+         Join Filter: ((nb.nconst)::text = (npt.nconst)::text)
+         ->  Bitmap Heap Scan on name_basics nb  (cost=13.86..2688.79 rows=683 width=34) (actual time=1.172..1.173 rows=0 loops=1)
+               Recheck Cond: ((nconst)::text = $0)
+               ->  Bitmap Index Scan on name_basics_idx  (cost=0.00..13.69 rows=683 width=0) (actual time=1.167..1.168 rows=0 loops=1)
+                     Index Cond: ((nconst)::text = $0)
+         ->  Materialize  (cost=0.56..8.79 rows=10 width=31) (never executed)
+               ->  Index Scan using name_professions_titles_idx on name_professions_titles npt  (cost=0.56..8.74 rows=10 width=31) (never executed)
+                     Index Cond: ((nconst)::text = $0)
+ Planning Time: 10.897 ms
+ Execution Time: 1.314 ms
+(16 rows)
+

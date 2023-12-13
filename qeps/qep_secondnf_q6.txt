@@ -1,0 +1,19 @@
+                                                                              QUERY PLAN                                                                               
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=1015.62..1015.91 rows=115 width=41) (actual time=3.453..3.455 rows=4 loops=1)
+   Sort Key: nb.birthyear DESC
+   Sort Method: quicksort  Memory: 25kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.008..0.008 rows=1 loops=1)
+   ->  Nested Loop  (cost=1.56..1011.66 rows=115 width=41) (actual time=2.195..3.438 rows=4 loops=1)
+         ->  Nested Loop  (cost=1.00..24.09 rows=115 width=32) (actual time=1.719..1.723 rows=4 loops=1)
+               ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.43..8.45 rows=1 width=15) (actual time=0.707..0.708 rows=1 loops=1)
+                     Index Cond: ((tconst)::text = $0)
+               ->  Index Scan using title_principals_tconst_idx on title_principals tp  (cost=0.56..14.49 rows=115 width=37) (actual time=1.008..1.009 rows=4 loops=1)
+                     Index Cond: ((tconst)::text = $0)
+         ->  Index Scan using name_basics_idx on name_basics nb  (cost=0.56..8.58 rows=1 width=29) (actual time=0.426..0.427 rows=1 loops=4)
+               Index Cond: ((nconst)::text = (tp.nconst)::text)
+ Planning Time: 15.571 ms
+ Execution Time: 3.514 ms
+(15 rows)
+

@@ -1,0 +1,11 @@
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ ProjectSet  (cost=0.59..140.62 rows=730 width=85) (actual time=0.056..0.057 rows=0 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.006..0.007 rows=1 loops=1)
+   ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..135.84 rows=73 width=49) (actual time=0.056..0.056 rows=0 loops=1)
+         Index Cond: ((titleid)::text = $0)
+ Planning Time: 0.376 ms
+ Execution Time: 0.090 ms
+(7 rows)
+

@@ -1,0 +1,21 @@
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=55.61..64.13 rows=852 width=48) (actual time=2.736..2.739 rows=0 loops=1)
+   Group Key: ta.title, ty.type, tat.attribute
+   Batches: 1  Memory Usage: 49kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.008..0.009 rows=1 loops=1)
+   ->  Nested Loop  (cost=1.42..44.93 rows=1420 width=48) (actual time=2.728..2.730 rows=0 loops=1)
+         ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..9.81 rows=71 width=31) (actual time=0.668..0.669 rows=2 loops=1)
+               Index Cond: ((tconst)::text = $0)
+         ->  Materialize  (cost=0.85..17.42 rows=20 width=47) (actual time=1.028..1.028 rows=0 loops=2)
+               ->  Nested Loop  (cost=0.85..17.32 rows=20 width=47) (actual time=2.050..2.051 rows=0 loops=1)
+                     ->  Index Scan using title_types_idx on title_types ty  (cost=0.43..8.61 rows=10 width=20) (actual time=1.509..1.512 rows=2 loops=1)
+                           Index Cond: ((tconst)::text = $0)
+                     ->  Materialize  (cost=0.42..8.47 rows=2 width=27) (actual time=0.267..0.267 rows=0 loops=2)
+                           ->  Index Scan using title_attributes_idx on title_attributes tat  (cost=0.42..8.46 rows=2 width=27) (actual time=0.529..0.529 rows=0 loops=1)
+                                 Index Cond: ((tconst)::text = $0)
+ Planning Time: 10.892 ms
+ Execution Time: 2.818 ms
+(17 rows)
+

@@ -63,14 +63,14 @@ INNER JOIN kft
 
 SELECT te.seasonnumber
      , te.episodenumber
-	 , tb.primarytitle
+     , tb.primarytitle
 FROM public.title_basics tb
 INNER JOIN public.title_episode te
   ON (tb.tconst = te.parenttconst)
 WHERE tb.titletype = 'tvSeries'
 AND   tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random)
 ORDER BY te.seasonnumber  ASC
-       , te.episodenumber ASC; 
+       , te.episodenumber ASC;
 
 --------------------------------
 --------------------------------
@@ -85,9 +85,9 @@ ORDER BY te.seasonnumber  ASC
 
 SELECT nb.primaryname
      , nb.birthyear
-	 , nb.deathyear
-	 , UNNEST(STRING_TO_ARRAY(nb.primaryprofession, ',')) AS primaryprofession
-	 , UNNEST(STRING_TO_ARRAY(nb.knownfortitles, ','))    AS knownfortitle
+     , nb.deathyear
+     , UNNEST(STRING_TO_ARRAY(nb.primaryprofession, ',')) AS primaryprofession
+     , UNNEST(STRING_TO_ARRAY(nb.knownfortitles, ','))    AS knownfortitle
 FROM public.name_basics nb
 WHERE nb.nconst = (SELECT 'nm' || LPAD((FLOOR(RANDOM()*(9993719 - 1 + 1)) + 1)::text, 7, '0') AS nconst_random);
 
@@ -104,8 +104,8 @@ WHERE nb.nconst = (SELECT 'nm' || LPAD((FLOOR(RANDOM()*(9993719 - 1 + 1)) + 1)::
 --------------------------------
 
 SELECT ta.title
-	 , UNNEST(STRING_TO_ARRAY(ta.types, ','))      AS type
-	 , UNNEST(STRING_TO_ARRAY(ta.attributes, ',')) AS attribute
+     , UNNEST(STRING_TO_ARRAY(ta.types, ','))      AS type
+     , UNNEST(STRING_TO_ARRAY(ta.attributes, ',')) AS attribute
 FROM public.title_akas ta
 WHERE ta.titleid = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
 
@@ -122,9 +122,9 @@ WHERE ta.titleid = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1):
 
 SELECT nb.primaryname
      , nb.birthyear
-	 , tp.category
-	 , tp.job
-	 , tb.startyear
+     , tp.category
+     , tp.job
+     , tb.startyear
 FROM public.title_principals tp
 INNER JOIN public.name_basics nb
   ON (tp.nconst = nb.nconst)
@@ -147,13 +147,13 @@ ORDER BY nb.birthyear DESC;
 SELECT DISTINCT
        tb.primarytitle
      , tb.startyear
-	 , tb.runtimeminutes
+	, tb.runtimeminutes
      , tb.genres
-	 , tr.averagerating
-	 , nb_d.primaryname AS "director name"
-	 , nb_w.primaryname AS "writer name"
-	 , nb_a.primaryname AS "actor name"
-	 , tp_a.characters  AS "character names"
+	, tr.averagerating
+	, nb_d.primaryname AS "director name"
+	, nb_w.primaryname AS "writer name"
+	, nb_a.primaryname AS "actor name"
+	, tp_a.characters  AS "character names"
 FROM  public.title_basics tb
 LEFT OUTER JOIN public.title_ratings tr
   ON (tb.tconst = tr.tconst)

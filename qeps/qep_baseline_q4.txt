@@ -1,0 +1,11 @@
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ ProjectSet  (cost=0.59..8.67 rows=10 width=88) (actual time=0.093..0.094 rows=0 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+   ->  Index Scan using name_basics_idx on name_basics nb  (cost=0.56..8.58 rows=1 width=54) (actual time=0.092..0.092 rows=0 loops=1)
+         Index Cond: ((nconst)::text = $0)
+ Planning Time: 0.363 ms
+ Execution Time: 0.135 ms
+(7 rows)
+

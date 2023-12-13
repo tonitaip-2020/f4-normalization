@@ -1,0 +1,19 @@
+                                                                                   QUERY PLAN                                                                                   
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=25923.03..25923.66 rows=250 width=27) (actual time=857.124..857.169 rows=250 loops=1)
+   ->  Sort  (cost=25923.03..25926.21 rows=1269 width=27) (actual time=857.121..857.141 rows=250 loops=1)
+         Sort Key: averagerating DESC
+         Sort Method: top-N heapsort  Memory: 55kB
+         ->  Bitmap Heap Scan on title_basics tb  (cost=20968.09..25866.15 rows=1269 width=27) (actual time=106.541..853.072 rows=6339 loops=1)
+               Recheck Cond: (((titletype)::text = 'movie'::text) AND (numvotes > '25000'::numeric))
+               Filter: (isoriginaltitle IS TRUE)
+               Heap Blocks: exact=6242
+               ->  BitmapAnd  (cost=20968.09..20968.09 rows=1269 width=0) (actual time=105.691..105.692 rows=0 loops=1)
+                     ->  Bitmap Index Scan on title_basics_titletype_averagerating_idx  (cost=0.00..834.73 rows=28216 width=0) (actual time=33.607..33.607 rows=298176 loops=1)
+                           Index Cond: (((titletype)::text = 'movie'::text) AND (numvotes > '25000'::numeric))
+                     ->  Bitmap Index Scan on title_basics_isoriginaltitle_idx  (cost=0.00..20132.48 rows=1849605 width=0) (actual time=69.731..69.731 rows=1836986 loops=1)
+                           Index Cond: (isoriginaltitle = true)
+ Planning Time: 11.846 ms
+ Execution Time: 857.240 ms
+(15 rows)
+

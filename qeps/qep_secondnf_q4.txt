@@ -1,0 +1,18 @@
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Unique  (cost=17.69..17.86 rows=11 width=45) (actual time=2.950..2.954 rows=1 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.008..0.009 rows=1 loops=1)
+   ->  Sort  (cost=17.66..17.69 rows=11 width=45) (actual time=2.949..2.951 rows=1 loops=1)
+         Sort Key: nb.primaryname, nb.birthyear, nb.deathyear, npt.primaryprofession, npt.knownfortitle
+         Sort Method: quicksort  Memory: 25kB
+         ->  Nested Loop Left Join  (cost=1.12..17.47 rows=11 width=45) (actual time=2.928..2.935 rows=1 loops=1)
+               Join Filter: ((nb.nconst)::text = (npt.nconst)::text)
+               ->  Index Scan using name_basics_idx on name_basics nb  (cost=0.56..8.58 rows=1 width=34) (actual time=2.040..2.041 rows=1 loops=1)
+                     Index Cond: ((nconst)::text = $0)
+               ->  Index Scan using name_professions_titles_idx on name_professions_titles npt  (cost=0.56..8.75 rows=11 width=31) (actual time=0.871..0.875 rows=1 loops=1)
+                     Index Cond: ((nconst)::text = $0)
+ Planning Time: 10.260 ms
+ Execution Time: 3.020 ms
+(14 rows)
+

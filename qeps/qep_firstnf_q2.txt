@@ -1,0 +1,15 @@
+                                                                           QUERY PLAN                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=1.16..3509.75 rows=37 width=21) (actual time=1.295..1.296 rows=0 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+   ->  Index Scan using name_professions_titles_idx on name_professions_titles npt  (cost=0.56..8.74 rows=10 width=10) (actual time=0.846..0.847 rows=1 loops=1)
+         Index Cond: ((nconst)::text = $0)
+   ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.56..350.06 rows=4 width=31) (actual time=0.445..0.445 rows=0 loops=1)
+         Index Cond: ((tconst)::text = (npt.knownfortitle)::text)
+         Filter: (isoriginaltitle IS TRUE)
+         Rows Removed by Filter: 1
+ Planning Time: 14.142 ms
+ Execution Time: 1.335 ms
+(11 rows)
+

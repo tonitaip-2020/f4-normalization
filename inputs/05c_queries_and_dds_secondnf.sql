@@ -61,7 +61,7 @@ AND npt.nconst = (SELECT 'nm' || LPAD((FLOOR(RANDOM()*(9993719 - 1 + 1)) + 1)::t
 
 SELECT te.seasonnumber
      , te.episodenumber
-	 , ta.title
+     , ta.title
 FROM secondnf.title_akas ta
 INNER JOIN secondnf.title_basics tb
   ON (ta.tconst = tb.tconst)
@@ -87,9 +87,9 @@ ORDER BY te.seasonnumber  ASC
 SELECT DISTINCT
        nb.primaryname
      , nb.birthyear
-	 , nb.deathyear
-	 , npt.primaryprofession
-	 , npt.knownfortitle
+     , nb.deathyear
+     , npt.primaryprofession
+     , npt.knownfortitle
 FROM secondnf.name_basics nb
 LEFT OUTER JOIN secondnf.name_professions_titles npt
   ON (nb.nconst = npt.nconst)
@@ -109,7 +109,7 @@ WHERE nb.nconst = (SELECT 'nm' || LPAD((FLOOR(RANDOM()*(9993719 - 1 + 1)) + 1)::
 SELECT DISTINCT
        ta.title
      , tya.type
-	 , tya.attribute
+     , tya.attribute
 FROM secondnf.title_akas ta
 INNER JOIN secondnf.title_types_attributes tya
   ON (ta.tconst = tya.tconst)
@@ -129,8 +129,8 @@ WHERE ta.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::
 SELECT nb.primaryname
      , nb.birthyear
      , tp.category
-	   , tp.job
-	   , tb.startyear
+     , tp.job
+     , tb.startyear
 FROM secondnf.title_basics tb
 INNER JOIN secondnf.title_principals tp
   ON (tb.tconst = tp.tconst)
@@ -154,13 +154,13 @@ ORDER BY nb.birthyear DESC;
 SELECT DISTINCT 
        ta.title
      , tb.startyear
-	 , tb.runtimeminutes
+     , tb.runtimeminutes
      , tg.genre
-	 , tb.averagerating
-	 , nb_d.primaryname AS "director name"
-	 , nb_w.primaryname AS "writer name"
-	 , nb_a.primaryname AS "actor name"
-	 , tc.character     AS "character name"
+     , tb.averagerating
+     , nb_d.primaryname AS "director name"
+     , nb_w.primaryname AS "writer name"
+     , nb_a.primaryname AS "actor name"
+     , tc.character     AS "character name"
 FROM secondnf.title_basics tb
 LEFT OUTER JOIN secondnf.title_genres tg
   ON (tb.tconst = tg.tconst)

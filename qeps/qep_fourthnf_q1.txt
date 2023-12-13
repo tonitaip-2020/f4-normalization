@@ -1,0 +1,17 @@
+                                                                                      QUERY PLAN                                                                                       
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=6226.42..6226.64 rows=85 width=27) (actual time=2702.963..2703.005 rows=250 loops=1)
+   ->  Sort  (cost=6226.42..6226.64 rows=85 width=27) (actual time=2702.960..2702.978 rows=250 loops=1)
+         Sort Key: tb.averagerating DESC
+         Sort Method: top-N heapsort  Memory: 55kB
+         ->  Nested Loop  (cost=1.12..6223.70 rows=85 width=27) (actual time=1.371..2697.111 rows=6339 loops=1)
+               ->  Index Scan using title_basics_titletype_averagerating_idx on title_basics tb  (cost=0.56..1535.21 rows=477 width=16) (actual time=0.818..696.568 rows=6339 loops=1)
+                     Index Cond: (((titletype)::text = 'movie'::text) AND (numvotes > '25000'::numeric))
+               ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..9.80 rows=3 width=31) (actual time=0.283..0.314 rows=1 loops=6339)
+                     Index Cond: ((tconst)::text = (tb.tconst)::text)
+                     Filter: (isoriginaltitle IS TRUE)
+                     Rows Removed by Filter: 46
+ Planning Time: 13.626 ms
+ Execution Time: 2703.055 ms
+(13 rows)
+

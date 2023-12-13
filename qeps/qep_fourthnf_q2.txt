@@ -1,0 +1,15 @@
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=1.16..87.43 rows=27 width=21) (actual time=1.376..1.574 rows=1 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+   ->  Index Scan using name_titles_idx on name_titles nt  (cost=0.56..8.70 rows=8 width=10) (actual time=1.053..1.054 rows=1 loops=1)
+         Index Cond: ((nconst)::text = $0)
+   ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..9.81 rows=3 width=31) (actual time=0.318..0.514 rows=1 loops=1)
+         Index Cond: ((tconst)::text = (nt.knownfortitle)::text)
+         Filter: (isoriginaltitle IS TRUE)
+         Rows Removed by Filter: 3
+ Planning Time: 12.715 ms
+ Execution Time: 1.617 ms
+(11 rows)
+

@@ -1,0 +1,17 @@
+                                                                                QUERY PLAN                                                                                 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=377.66..387.12 rows=946 width=48) (actual time=1.587..1.589 rows=0 loops=1)
+   Group Key: tb.title, tya.type, tya.attribute
+   Batches: 1  Memory Usage: 73kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.007..0.008 rows=1 loops=1)
+   ->  Nested Loop  (cost=1.00..370.54 rows=946 width=48) (actual time=1.578..1.579 rows=0 loops=1)
+         ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.56..350.06 rows=86 width=31) (actual time=0.882..0.885 rows=1 loops=1)
+               Index Cond: ((tconst)::text = $0)
+         ->  Materialize  (cost=0.43..8.68 rows=11 width=37) (actual time=0.690..0.690 rows=0 loops=1)
+               ->  Index Scan using title_types_attributes_idx on title_types_attributes tya  (cost=0.43..8.62 rows=11 width=37) (actual time=0.685..0.685 rows=0 loops=1)
+                     Index Cond: ((tconst)::text = $0)
+ Planning Time: 10.076 ms
+ Execution Time: 1.662 ms
+(13 rows)
+
