@@ -151,8 +151,7 @@ ORDER BY nb.birthyear DESC;
 -- secondnf:
 --------------------------------
 
-SELECT DISTINCT 
-       ta.title
+SELECT ta.title
      , tb.startyear
      , tb.runtimeminutes
      , tg.genre

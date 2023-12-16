@@ -153,8 +153,7 @@ ORDER BY nb.birthyear DESC;
 -- fourthnf:
 --------------------------------
 
-SELECT DISTINCT
-       ta.title
+SELECT ta.title
      , tb.startyear
      , tb.runtimeminutes
      , tg.genre
@@ -181,3 +180,4 @@ LEFT OUTER JOIN fourthnf.title_writers tw
 LEFT OUTER JOIN fourthnf.name_basics nb_w
   ON (tw.writer = nb_w.nconst)
 WHERE tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
+

@@ -143,8 +143,7 @@ ORDER BY nb.birthyear DESC;
 -- firstnf:
 --------------------------------
 
-SELECT DISTINCT 
-       tb.title
+SELECT tb.title
      , tb.startyear
      , tb.runtimeminutes
      , tg.genre
@@ -152,7 +151,7 @@ SELECT DISTINCT
      , nb_d.primaryname AS "director name"
      , nb_w.primaryname AS "writer name"
      , nb_a.primaryname AS "actor name"
-     , tc.character    AS "character name"
+     , tc.character     AS "character name"
 FROM   firstnf.title_basics tb
 LEFT OUTER JOIN firstnf.title_genres tg
   ON (tb.tconst = tg.tconst)
@@ -168,3 +167,4 @@ LEFT OUTER JOIN firstnf.name_basics nb_w
   ON (tdw.writer = nb_w.nconst)
 WHERE tb.isoriginaltitle IS True
 AND   tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
+

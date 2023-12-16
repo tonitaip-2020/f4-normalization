@@ -7,7 +7,8 @@ UPDATE public.title_principals
 SET characters = TRANSLATE(characters, '"', '');
 
 -- Drop the indices that are not used by the benchmark:
-DROP INDEX public.title_idx;
+DROP INDEX IF EXISTS public.title_idx;
+ALTER TABLE          public.title_basics DROP COLUMN IF EXISTS "titleSearchCol";
 
 --------------------------------------
 -- nfnf (flat):

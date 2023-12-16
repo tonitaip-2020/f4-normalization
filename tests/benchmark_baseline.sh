@@ -2,16 +2,16 @@
 
 export PGPASSWORD=imdb
 
-# Run powerstat for 30 minutes and 5 seconds, measure in 1s intervals:
-sudo powerstat -cDHRf 1 1805 > ../outputs/benchmark_baseline_powerstat_$(date +%Y%m%d%H%M).txt &
+# Run powerstat for 60 minutes and 10 seconds, measure in 1s intervals:
+sudo powerstat -cDHRf 1 3610 > ../outputs/benchmark_baseline_powerstat_$(date +%Y%m%d%H%M).txt &
 powerstat_pid=$!
 
-# Run sar for 30 minutes and 5 seconds, measure in 1s intervals:
-sar -r 1 1805 > ../outputs/benchmark_baseline_sar_mem_$(date +%Y%m%d%H%M).txt &
+# Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
+sar -r 1 3610 > ../outputs/benchmark_baseline_sar_mem_$(date +%Y%m%d%H%M).txt &
 sar_pid_mem=$!
 
-# Run sar for 30 minutes and 5 seconds, measure in 1s intervals:
-sar -u 1 1805 > ../outputs/benchmark_baseline_sar_cpu_$(date +%Y%m%d%H%M).txt &
+# Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
+sar -u 1 3610 > ../outputs/benchmark_baseline_sar_cpu_$(date +%Y%m%d%H%M).txt &
 sar_pid_cpu=$!
 
 # Run pgbench
@@ -19,12 +19,12 @@ sar_pid_cpu=$!
 # -f = file to run
 # -j = number of threads, must be a multiple of "c"
 # -n = required in custom tests
-# -T = time to run in seconds, 1800 = 30 min
+# -T = time to run in seconds, 3600 = 60 min
 # -U = postgres user name
 # -h = host url
-pgbench -c 150 -f ../inputs/05a_queries_and_dds_baseline.sql -j 300 -n -T 1800 -U imdb imdb -h localhost > ../outputs/benchmark_baseline_pgbench_$(date +%Y%m%d%H%M).txt
+pgbench -c 150 -f ../inputs/05a_queries_and_dds_baseline.sql -j 300 -n -T 3600 -U imdb imdb -h localhost > ../outputs/benchmark_baseline_pgbench_$(date +%Y%m%d%H%M).txt
 
-# Check the exit status of psql
+# Check the exit status of pgbench
 if [ $? -eq 0 ]
 then
     echo "SQL commands have been executed."

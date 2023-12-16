@@ -144,23 +144,22 @@ ORDER BY nb.birthyear DESC;
 -- public (baseline)
 --------------------------------
 
-SELECT DISTINCT
-       tb.primarytitle
+SELECT tb.primarytitle
      , tb.startyear
-	, tb.runtimeminutes
+     , tb.runtimeminutes
      , tb.genres
-	, tr.averagerating
-	, nb_d.primaryname AS "director name"
-	, nb_w.primaryname AS "writer name"
-	, nb_a.primaryname AS "actor name"
-	, tp_a.characters  AS "character names"
+     , tr.averagerating
+     , nb_d.primaryname AS "director name"
+     , nb_w.primaryname AS "writer name"
+     , nb_a.primaryname AS "actor name"
+     , tp_a.characters  AS "character names"
 FROM  public.title_basics tb
 LEFT OUTER JOIN public.title_ratings tr
   ON (tb.tconst = tr.tconst)
 LEFT OUTER JOIN public.title_principals tp_a
   ON (tb.tconst = tp_a.tconst)
 LEFT OUTER JOIN public.name_basics nb_a
-  ON (tp_a.nconst = nb_a.nconst AND tp_a.category = 'actor')
+  ON (tp_a.nconst = nb_a.nconst AND tp_a.category IN ('actor', 'actress'))
 LEFT OUTER JOIN public.title_principals tp_d
   ON (tb.tconst = tp_d.tconst)
 LEFT OUTER JOIN public.name_basics nb_d
@@ -170,3 +169,4 @@ LEFT OUTER JOIN public.title_principals tp_w
 LEFT OUTER JOIN public.name_basics nb_w
   ON (tp_w.nconst = nb_w.nconst AND tp_w.category = 'writer')
 WHERE tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
+
