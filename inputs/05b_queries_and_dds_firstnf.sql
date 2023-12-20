@@ -143,7 +143,8 @@ ORDER BY nb.birthyear DESC;
 -- firstnf:
 --------------------------------
 
-SELECT tb.title
+SELECT DISTINCT
+       tb.title
      , tb.startyear
      , tb.runtimeminutes
      , tg.genre

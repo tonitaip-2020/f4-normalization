@@ -153,7 +153,8 @@ ORDER BY nb.birthyear DESC;
 -- fourthnf:
 --------------------------------
 
-SELECT ta.title
+SELECT DISTINCT
+       ta.title
      , tb.startyear
      , tb.runtimeminutes
      , tg.genre

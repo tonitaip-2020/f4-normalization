@@ -22,7 +22,8 @@ sar_pid_cpu=$!
 # -T = time to run in seconds, 1800 = 30 min
 # -U = postgres user name
 # -h = host url
-pgbench -c 150 -f ../inputs/05b_queries_and_dds_firstnf.sql -j 300 -n -T 3600 -U imdb imdb -h localhost > ../outputs/benchmark_firstnf_pgbench_$(date +%Y%m%d%H%M).txt
+# -p = port, default is 5432
+pgbench -c 150 -f ../inputs/05b_queries_and_dds_firstnf.sql -j 300 -n -T 3600 -U imdb imdb -h localhost -p 5433 > ../outputs/benchmark_firstnf_pgbench_$(date +%Y%m%d%H%M).txt
 
 # Check the exit status of pgbench
 if [ $? -eq 0 ]

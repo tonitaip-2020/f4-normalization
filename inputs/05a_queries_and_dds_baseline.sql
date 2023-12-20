@@ -144,7 +144,8 @@ ORDER BY nb.birthyear DESC;
 -- public (baseline)
 --------------------------------
 
-SELECT tb.primarytitle
+SELECT DISTINCT
+       tb.primarytitle
      , tb.startyear
      , tb.runtimeminutes
      , tb.genres
