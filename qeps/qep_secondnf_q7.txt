@@ -1,0 +1,39 @@
+                                                                                          QUERY PLAN                                                                                           
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=804.34..863.62 rows=5928 width=95) (actual time=6.307..6.341 rows=12 loops=1)
+   Group Key: ta.title, tb.startyear, tb.runtimeminutes, tg.genre, tb.averagerating, nb_d.primaryname, nb_w.primaryname, nb_a.primaryname, tc."character"
+   Batches: 1  Memory Usage: 225kB
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.008..0.009 rows=1 loops=1)
+   ->  Nested Loop Left Join  (cost=4.36..670.93 rows=5928 width=95) (actual time=4.259..6.282 rows=12 loops=1)
+         ->  Nested Loop Left Join  (cost=3.24..261.16 rows=156 width=79) (actual time=3.217..4.288 rows=3 loops=1)
+               ->  Nested Loop Left Join  (cost=1.69..27.24 rows=12 width=51) (actual time=2.117..2.121 rows=1 loops=1)
+                     ->  Nested Loop Left Join  (cost=1.12..18.42 rows=3 width=44) (actual time=1.408..1.411 rows=1 loops=1)
+                           ->  Index Scan using title_basics_idx on title_basics tb  (cost=0.56..8.58 rows=1 width=23) (actual time=0.737..0.737 rows=1 loops=1)
+                                 Index Cond: ((tconst)::text = $0)
+                           ->  Index Scan using title_akas_idx on title_akas ta  (cost=0.56..9.81 rows=3 width=31) (actual time=0.668..0.669 rows=1 loops=1)
+                                 Index Cond: ((tconst)::text = $0)
+                                 Filter: (isoriginaltitle IS TRUE)
+                                 Rows Removed by Filter: 1
+                     ->  Materialize  (cost=0.56..8.68 rows=4 width=17) (actual time=0.707..0.708 rows=1 loops=1)
+                           ->  Index Scan using title_genres_idx on title_genres tg  (cost=0.56..8.66 rows=4 width=17) (actual time=0.702..0.703 rows=1 loops=1)
+                                 Index Cond: ((tconst)::text = $0)
+               ->  Materialize  (cost=1.56..232.00 rows=13 width=38) (actual time=1.098..2.164 rows=3 loops=1)
+                     ->  Nested Loop Left Join  (cost=1.56..231.94 rows=13 width=38) (actual time=1.097..2.160 rows=3 loops=1)
+                           ->  Nested Loop Left Join  (cost=1.00..120.30 rows=13 width=34) (actual time=1.080..1.441 rows=3 loops=1)
+                                 ->  Index Scan using title_directors_writers_idx on title_directors_writers tdw  (cost=0.43..8.66 rows=13 width=30) (actual time=0.616..0.618 rows=3 loops=1)
+                                       Index Cond: ((tconst)::text = $0)
+                                 ->  Index Scan using name_basics_idx on name_basics nb_d  (cost=0.56..8.58 rows=1 width=24) (actual time=0.272..0.273 rows=1 loops=3)
+                                       Index Cond: ((nconst)::text = (tdw.director)::text)
+                           ->  Index Scan using name_basics_idx on name_basics nb_w  (cost=0.56..8.58 rows=1 width=24) (actual time=0.237..0.238 rows=1 loops=3)
+                                 Index Cond: ((nconst)::text = (tdw.writer)::text)
+         ->  Materialize  (cost=1.12..335.77 rows=38 width=36) (actual time=0.347..0.662 rows=4 loops=3)
+               ->  Nested Loop Left Join  (cost=1.12..335.58 rows=38 width=36) (actual time=1.038..1.978 rows=4 loops=1)
+                     ->  Index Scan using title_characters_tconst_idx on title_characters tc  (cost=0.56..9.26 rows=38 width=32) (actual time=0.697..0.699 rows=4 loops=1)
+                           Index Cond: ((tconst)::text = $0)
+                     ->  Index Scan using name_basics_idx on name_basics nb_a  (cost=0.56..8.58 rows=1 width=24) (actual time=0.317..0.318 rows=1 loops=4)
+                           Index Cond: ((nconst)::text = (tc.nconst)::text)
+ Planning Time: 10.928 ms
+ Execution Time: 6.484 ms
+(35 rows)
+

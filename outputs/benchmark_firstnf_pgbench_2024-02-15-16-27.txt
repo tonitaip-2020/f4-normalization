@@ -1,0 +1,13 @@
+pgbench (16.1 (Ubuntu 16.1-1.pgdg22.04+1))
+transaction type: ../inputs/05b_queries_and_dds_firstnf.sql
+scaling factor: 1
+query mode: simple
+number of clients: 48
+number of threads: 48
+maximum number of tries: 1
+duration: 3600 s
+number of transactions actually processed: 347625
+number of failed transactions: 0 (0.000%)
+latency average = 497.074 ms
+initial connection time = 532.268 ms
+tps = 96.565103 (without initial connection time)

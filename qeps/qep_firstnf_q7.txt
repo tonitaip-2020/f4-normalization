@@ -1,0 +1,63 @@
+                                                                                                        QUERY PLAN                                                                                                         
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Unique  (cost=127418933239.22..567974523717.08 rows=1665713025671 width=96) (actual time=379.111..410.282 rows=0 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=198.873..198.874 rows=1 loops=1)
+   ->  Incremental Sort  (cost=127418933239.19..530495980639.46 rows=1665713025671 width=96) (actual time=379.110..410.280 rows=0 loops=1)
+         Sort Key: tb.title, tb.startyear, tb.runtimeminutes, tg.genre, tb.averagerating, nb_d.primaryname, nb_w.primaryname, nb_a.primaryname, tc."character"
+         Presorted Key: tb.title, tb.startyear, tb.runtimeminutes
+         Full-sort Groups: 1  Sort Method: quicksort  Average Memory: 25kB  Peak Memory: 25kB
+         ->  Nested Loop Left Join  (cost=388379.43..17397323280.30 rows=1665713025671 width=96) (actual time=379.097..410.267 rows=0 loops=1)
+               ->  Nested Loop Left Join  (cost=388369.79..26357873.38 rows=2124884669 width=92) (actual time=379.096..410.266 rows=0 loops=1)
+                     ->  Nested Loop Left Join  (cost=388360.15..458606.18 rows=3155457 width=88) (actual time=379.095..410.265 rows=0 loops=1)
+                           ->  Nested Loop Left Join  (cost=388350.09..388384.25 rows=640 width=74) (actual time=379.095..410.264 rows=0 loops=1)
+                                 ->  Nested Loop Left Join  (cost=388349.53..388366.85 rows=16 width=52) (actual time=379.095..410.263 rows=0 loops=1)
+                                       ->  Gather Merge  (cost=388348.97..388349.43 rows=4 width=45) (actual time=379.094..410.261 rows=0 loops=1)
+                                             Workers Planned: 2
+                                             Params Evaluated: $0
+                                             Workers Launched: 2
+                                             ->  Sort  (cost=387348.94..387348.95 rows=2 width=45) (actual time=173.355..173.356 rows=0 loops=3)
+                                                   Sort Key: tb.title, tb.startyear, tb.runtimeminutes
+                                                   Sort Method: quicksort  Memory: 25kB
+                                                   Worker 0:  Sort Method: quicksort  Memory: 25kB
+                                                   Worker 1:  Sort Method: quicksort  Memory: 25kB
+                                                   ->  Parallel Index Scan using title_basics_isoriginaltitle_idx on title_basics tb  (cost=0.44..387348.93 rows=2 width=45) (actual time=173.331..173.331 rows=0 loops=3)
+                                                         Index Cond: (isoriginaltitle = true)
+                                                         Filter: ((tconst)::text = $0)
+                                                         Rows Removed by Filter: 612329
+                                       ->  Materialize  (cost=0.56..17.23 rows=4 width=17) (never executed)
+                                             ->  Index Scan using title_genres_idx on title_genres tg  (cost=0.56..17.21 rows=4 width=17) (never executed)
+                                                   Index Cond: ((tconst)::text = $0)
+                                 ->  Materialize  (cost=0.56..9.49 rows=40 width=32) (never executed)
+                                       ->  Index Scan using title_characters_tconst_idx on title_characters tc  (cost=0.56..9.29 rows=40 width=32) (never executed)
+                                             Index Cond: ((tconst)::text = $0)
+                           ->  Materialize  (cost=10.06..30794.25 rows=4930 width=34) (never executed)
+                                 ->  Nested Loop Left Join  (cost=10.06..30769.60 rows=4930 width=34) (never executed)
+                                       ->  Index Scan using title_directors_writers_idx on title_directors_writers tdw  (cost=0.43..8.64 rows=12 width=30) (never executed)
+                                             Index Cond: ((tconst)::text = $0)
+                                       ->  Bitmap Heap Scan on name_basics nb_d  (cost=9.63..2556.88 rows=653 width=24) (never executed)
+                                             Recheck Cond: ((tdw.director)::text = (nconst)::text)
+                                             ->  Bitmap Index Scan on name_basics_idx  (cost=0.00..9.47 rows=653 width=0) (never executed)
+                                                   Index Cond: ((nconst)::text = (tdw.director)::text)
+                     ->  Memoize  (cost=9.64..2522.15 rows=653 width=24) (never executed)
+                           Cache Key: tc.nconst
+                           Cache Mode: logical
+                           ->  Bitmap Heap Scan on name_basics nb_a  (cost=9.63..2522.14 rows=653 width=24) (never executed)
+                                 Recheck Cond: ((tc.nconst)::text = (nconst)::text)
+                                 ->  Bitmap Index Scan on name_basics_idx  (cost=0.00..9.47 rows=653 width=0) (never executed)
+                                       Index Cond: ((nconst)::text = (tc.nconst)::text)
+               ->  Memoize  (cost=9.64..2556.89 rows=653 width=24) (never executed)
+                     Cache Key: tdw.writer
+                     Cache Mode: logical
+                     ->  Bitmap Heap Scan on name_basics nb_w  (cost=9.63..2556.88 rows=653 width=24) (never executed)
+                           Recheck Cond: ((tdw.writer)::text = (nconst)::text)
+                           ->  Bitmap Index Scan on name_basics_idx  (cost=0.00..9.47 rows=653 width=0) (never executed)
+                                 Index Cond: ((nconst)::text = (tdw.writer)::text)
+ Planning Time: 4.833 ms
+ JIT:
+   Functions: 65
+   Options: Inlining true, Optimization true, Expressions true, Deforming true
+   Timing: Generation 4.346 ms, Inlining 70.194 ms, Optimization 154.955 ms, Emission 105.475 ms, Total 334.970 ms
+ Execution Time: 414.426 ms
+(59 rows)
+

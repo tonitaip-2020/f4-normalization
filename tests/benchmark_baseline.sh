@@ -3,15 +3,15 @@
 export PGPASSWORD=imdb
 
 # Run powerstat for 60 minutes and 10 seconds, measure in 1s intervals:
-sudo powerstat -cDHRf 1 3610 > ../outputs/benchmark_baseline_powerstat_$(date +%Y%m%d%H%M).txt &
+sudo powerstat -cDHRf 1 3610 > ../outputs/benchmark_baseline_powerstat_$(date +%Y-%m-%d-%H-%M).txt &
 powerstat_pid=$!
 
 # Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
-sar -r 1 3610 > ../outputs/benchmark_baseline_sar_mem_$(date +%Y%m%d%H%M).txt &
+sar -r 1 3610 > ../outputs/benchmark_baseline_sar_mem_$(date +%Y-%m-%d-%H-%M).txt &
 sar_pid_mem=$!
 
 # Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
-sar -u 1 3610 > ../outputs/benchmark_baseline_sar_cpu_$(date +%Y%m%d%H%M).txt &
+sar -u 1 3610 > ../outputs/benchmark_baseline_sar_cpu_$(date +%Y-%m-%d-%H-%M).txt &
 sar_pid_cpu=$!
 
 # Run pgbench
@@ -23,7 +23,7 @@ sar_pid_cpu=$!
 # -U = postgres user name
 # -h = host url
 # -p = port, default 5432
-pgbench -c 150 -f ../inputs/05a_queries_and_dds_baseline.sql -j 150 -n -T 3600 -U imdb imdb -h localhost -p 5433 > ../outputs/benchmark_baseline_pgbench_$(date +%Y%m%d%H%M).txt
+pgbench -c 48 -f ../inputs/05a_queries_and_dds_baseline.sql -j 48 -n -T 3600 -U imdb imdb -h localhost -p 5433 > ../outputs/benchmark_baseline_pgbench_$(date +%Y-%m-%d-%H-%M).txt
 
 # Check the exit status of pgbench
 if [ $? -eq 0 ]
