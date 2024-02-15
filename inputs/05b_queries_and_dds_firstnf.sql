@@ -143,29 +143,29 @@ ORDER BY nb.birthyear DESC;
 -- firstnf:
 --------------------------------
 
---SELECT DISTINCT
---       tb.title
---     , tb.startyear
---     , tb.runtimeminutes
---     , tg.genre
---     , tb.averagerating
---     , nb_d.primaryname AS "director name"
---     , nb_w.primaryname AS "writer name"
---     , nb_a.primaryname AS "actor name"
---     , tc.character     AS "character name"
---FROM   firstnf.title_basics tb
---LEFT OUTER JOIN firstnf.title_genres tg
---  ON (tb.tconst = tg.tconst)
---LEFT OUTER JOIN firstnf.title_characters tc
---  ON (tb.tconst = tc.tconst)
---LEFT OUTER JOIN firstnf.name_basics nb_a
---  ON (tc.nconst = nb_a.nconst)
---LEFT OUTER JOIN firstnf.title_directors_writers tdw
---  ON (tb.tconst = tdw.tconst)
---LEFT OUTER JOIN firstnf.name_basics nb_d
---  ON (tdw.director = nb_d.nconst)
---LEFT OUTER JOIN firstnf.name_basics nb_w
---  ON (tdw.writer = nb_w.nconst)
---WHERE tb.isoriginaltitle IS True
---AND   tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
+SELECT DISTINCT
+       tb.title
+     , tb.startyear
+     , tb.runtimeminutes
+     , tg.genre
+     , tb.averagerating
+     , nb_d.primaryname AS "director name"
+     , nb_w.primaryname AS "writer name"
+     , nb_a.primaryname AS "actor name"
+     , tc.character     AS "character name"
+FROM   firstnf.title_basics tb
+LEFT OUTER JOIN firstnf.title_genres tg
+  ON (tb.tconst = tg.tconst)
+LEFT OUTER JOIN firstnf.title_characters tc
+  ON (tb.tconst = tc.tconst)
+LEFT OUTER JOIN firstnf.name_basics nb_a
+  ON (tc.nconst = nb_a.nconst)
+LEFT OUTER JOIN firstnf.title_directors_writers tdw
+  ON (tb.tconst = tdw.tconst)
+LEFT OUTER JOIN firstnf.name_basics nb_d
+  ON (tdw.director = nb_d.nconst)
+LEFT OUTER JOIN firstnf.name_basics nb_w
+  ON (tdw.writer = nb_w.nconst);
+WHERE tb.isoriginaltitle IS True
+AND   tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
 
