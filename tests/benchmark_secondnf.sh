@@ -23,7 +23,7 @@ sar_pid_cpu=$!
 # -U = postgres user name
 # -h = host url
 # -p = port, default 5432
-pgbench -c 48 -f ../inputs/05c_queries_and_dds_secondnf.sql -j 48 -n -T 3600 -U imdb imdb -h localhost -p 5433 > ../outputs/benchmark_secondnf_pgbench_$(date +%Y-%m-%d-%H-%M).txt
+pgbench -c 24 -f ../inputs/05c_queries_and_dds_secondnf.sql -j 24 -n -T 3600 -U imdb imdb -h localhost -p 5433 > ../outputs/benchmark_secondnf_pgbench_$(date +%Y-%m-%d-%H-%M).txt
 
 # Check the exit status of pgbench
 if [ $? -eq 0 ]
