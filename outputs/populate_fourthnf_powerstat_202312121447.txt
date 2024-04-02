@@ -1,6 +1,3 @@
-Running for 1860.0 seconds (3720 samples at 0.5 second intervals).
-Power measurements will start in 0 seconds time.
-
   Time    User  Nice   Sys  Idle    IO  Run Ctxt/s  IRQ/s Fork Exec Exit  Watts   pkg-0 uncore  pkg-0   core  CPU Freq
 14:47:13   2.4   0.0   0.6  96.7   0.3    1  14472   9202    0    0    2 111.98   55.99   0.00  55.99  48.17  2.84 GHz
 14:47:13   2.3   0.0   0.6  96.7   0.4    2  13010   8558    0    0    0 110.37   55.12   0.00  55.25  47.42  2.95 GHz

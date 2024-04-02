@@ -7,11 +7,11 @@ sudo powerstat -cDHRf 1 3610 > ../outputs/benchmark_firstnf_powerstat_$(date +%Y
 powerstat_pid=$!
 
 # Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
-sar -r 1 3610 > ../outputs/benchmark_firstnf_sar_mem_$(date +%Y-%m-%d-%H-%M).txt &
+sar -r 1 3610 > ../outputs/benchmark_firstnf_mem_$(date +%Y-%m-%d-%H-%M).txt &
 sar_pid_mem=$!
 
 # Run sar for 60 minutes and 10 seconds, measure in 1s intervals:
-sar -u 1 3610 > ../outputs/benchmark_firstnf_sar_cpu_$(date +%Y-%m-%d-%H-%M).txt &
+sar -u 1 3610 > ../outputs/benchmark_firstnf_cpu_$(date +%Y-%m-%d-%H-%M).txt &
 sar_pid_cpu=$!
 
 # Run pgbench
