@@ -1,0 +1,11 @@
+\i 01_create_tables.sql
+\i 02b_populate_firstnf.sql
+\i 02c_populate_secondnf.sql
+\i 02d_populate_fourthnf.sql
+\i 03b_create_primary_indices_firstnf.sql
+\i 03c_create_primary_indices_secondnf.sql
+\i 03d_create_primary_indices_fourthnf.sql
+\i 04a_create_all_indices_baseline.sql
+\i 04b_create_secondary_indices_firstnf.sql
+\i 04c_create_secondary_indices_secondnf.sql
+\i 04d_create_secondary_indices_fourthnf.sql
