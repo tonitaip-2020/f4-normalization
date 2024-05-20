@@ -6,4 +6,6 @@ testing34
 
 ## Replication instructions
 
+- Install PostgreSQL (16 in this setup).
+
 ## References
