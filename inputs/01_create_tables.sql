@@ -1,4 +1,6 @@
 -- Clean title.principals.characters:
+SELECT 'Cleaning up the original database. This might take several minutes.' AS status;
+
 UPDATE public.title_principals
 SET characters = TRANSLATE(characters, '[', '');
 UPDATE public.title_principals
@@ -15,6 +17,7 @@ SELECT 'Clean-up completed.' AS status;
 --------------------------------------
 -- firstnf:
 --------------------------------------
+CREATE SCHEMA IF NOT EXISTS firstnf;
 
 DROP TABLE IF EXISTS firstnf.name_basics              CASCADE;
 DROP TABLE IF EXISTS firstnf.title_basics             CASCADE;
@@ -93,6 +96,7 @@ SELECT 'Created the firstnf schema.' AS status;
 --------------------------------------
 -- secondnf:
 --------------------------------------
+CREATE SCHEMA IF NOT EXISTS secondnf;
 
 DROP TABLE IF EXISTS secondnf.name_basics              CASCADE;
 DROP TABLE IF EXISTS secondnf.name_professions_titles  CASCADE;
@@ -182,6 +186,7 @@ SELECT 'Created the secondnf schema.' AS status;
 --------------------------------------
 -- fourthnf:
 --------------------------------------
+CREATE SCHEMA IF NOT EXISTS fourthnf;
 
 DROP TABLE IF EXISTS fourthnf.title_basics     CASCADE;
 DROP TABLE IF EXISTS fourthnf.title_akas       CASCADE;
