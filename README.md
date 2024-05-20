@@ -15,6 +15,7 @@ testing34
     - If the script fails on Line 82, remove the dash before "csvsql".
   - Run the file 00_all.sql under /inputs using psql's \i command.
 - Running the benchmarks:
+  - Replace the postgresql.conf (under /config), make changes based on hardware.
   - Run the benchmarks one by one by calling the scripts under /tests.
 
 ## References
