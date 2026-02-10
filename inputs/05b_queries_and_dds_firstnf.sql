@@ -165,7 +165,7 @@ LEFT OUTER JOIN firstnf.title_directors_writers tdw
 LEFT OUTER JOIN firstnf.name_basics nb_d
   ON (tdw.director = nb_d.nconst)
 LEFT OUTER JOIN firstnf.name_basics nb_w
-  ON (tdw.writer = nb_w.nconst);
+  ON (tdw.writer = nb_w.nconst)
 WHERE tb.isoriginaltitle IS True
 AND   tb.tconst = (SELECT 'tt' || LPAD((FLOOR(RANDOM()*(9916880 - 1 + 1)) + 1)::text, 7, '0') AS tconst_random);
 
