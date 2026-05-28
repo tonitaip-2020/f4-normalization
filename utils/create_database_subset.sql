@@ -62,7 +62,7 @@ SELECT 'Creating index on keep_names.' AS status;
 CREATE UNIQUE INDEX ON keep_names(nconst);
 ANALYZE keep_names;
 
-SELECT 'Creating index on keep_names.' AS status;
+SELECT 'Creating index on title_basics.' AS status;
 CREATE TABLE imdb_1pct.title_basics AS
 SELECT b.*
 FROM public.title_basics b
@@ -95,6 +95,21 @@ CREATE TABLE imdb_1pct.title_crew AS
 SELECT c.*
 FROM public.title_crew c
 JOIN keep_titles kt ON kt.tconst = c.tconst;
+
+CREATE TABLE imdb_1pct.name_basics AS
+SELECT
+    n.nconst,
+    n.primaryname,
+    n.birthyear,
+    n.deathyear,
+    n.primaryprofession,
+    (
+        SELECT string_agg(x.tconst, ',' ORDER BY x.ord)
+        FROM unnest(string_to_array(n.knownfortitles, ',')) WITH ORDINALITY AS x(tconst, ord)
+        JOIN keep_titles kt ON kt.tconst = x.tconst
+    ) AS knownfortitles
+FROM public.name_basics n
+JOIN keep_names kn ON kn.nconst = n.nconst;
 
 SELECT 'Checking size:' AS status;
 SELECT pg_size_pretty(
