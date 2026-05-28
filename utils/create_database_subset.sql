@@ -3,13 +3,13 @@ CREATE SCHEMA imdb_1pct;
 -- Root sample: about 1% of titles.
 -- BERNOULLI is row-level; SYSTEM is faster but block-level.
 
-SELECT "Creating table seed_titles."
+SELECT "Creating table seed_titles.";
 CREATE TEMP TABLE seed_titles AS
 SELECT tconst
 FROM public.title_basics TABLESAMPLE BERNOULLI (1) REPEATABLE (42);
 
 -- Add parent series for sampled episodes, recursively just in case.
-SELECT "Creating table keep_titles."
+SELECT "Creating table keep_titles.";
 CREATE TEMP TABLE keep_titles AS
 WITH RECURSIVE kt(tconst) AS (
     SELECT tconst
@@ -26,11 +26,11 @@ SELECT DISTINCT kt.tconst
 FROM kt
 JOIN public.title_basics b ON b.tconst = kt.tconst;
 
-SELECT "Creating index on keep_titles."
+SELECT "Creating index on keep_titles.";
 CREATE UNIQUE INDEX ON keep_titles(tconst);
 ANALYZE keep_titles;
 
-SELECT "Creating table keep_names."
+SELECT "Creating table keep_names.";
 CREATE TEMP TABLE keep_names AS
 WITH title_people AS (
     -- Normalized-ish person references.
@@ -55,11 +55,11 @@ SELECT DISTINCT tp.nconst
 FROM title_people tp
 JOIN public.name_basics n ON n.nconst = tp.nconst;
 
-SELECT "Creating index on keep_names."
+SELECT "Creating index on keep_names.";
 CREATE UNIQUE INDEX ON keep_names(nconst);
 ANALYZE keep_names;
 
-SELECT "Creating index on keep_names."
+SELECT "Creating index on keep_names.";
 CREATE TABLE imdb_1pct.title_basics AS
 SELECT b.*
 FROM public.title_basics b
@@ -93,14 +93,14 @@ SELECT c.*
 FROM public.title_crew c
 JOIN keep_titles kt ON kt.tconst = c.tconst;
 
-SELECT "Checking size:"
+SELECT "Checking size:";
 SELECT pg_size_pretty(
     sum(pg_total_relation_size((quote_ident(schemaname) || '.' || quote_ident(tablename))::regclass))
 ) AS total_size
 FROM pg_tables
 WHERE schemaname = 'imdb_1pct';
 
-SELECT "Checking main orphan cases:"
+SELECT "Checking main orphan cases:";
 -- Principal rows whose person is missing.
 SELECT count(*) AS missing_principal_names
 FROM imdb_1pct.title_principals p
