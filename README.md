@@ -18,7 +18,7 @@ A replication package for creating, denormalizing, normalizing, and testing the 
   | sed 's/"//g; s/Year VARCHAR/Year DECIMAL/g' \
   | psql > /dev/null || break
   </code>
-  - And install csvkit to your virtual environment:  `pip3 install csvkit`
+  - And install csvkit to your virtual environment:  `pip3 install csvkit`.
   - Run the file 00_all.sql under /inputs using psql's \i command. This will create all the database structures, datasets, and indices.
 - Running the benchmarks:
   - Replace the postgresql.conf (under /config), make changes based on your hardware. The most important parameters are commented in the file.
