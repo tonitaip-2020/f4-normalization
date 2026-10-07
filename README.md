@@ -181,6 +181,7 @@ sudo install --owner=postgres --group=postgres --mode=700 \
 ```
 
 Store NETIO credentials in a PostgreSQL-readable file:
+(if you do not have access to a NETIO device, skip this and the next two steps)
 
 ```bash
 sudo install -d --owner=postgres --group=postgres --mode=700 \
