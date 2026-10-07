@@ -2,12 +2,6 @@
 
 ## Description
 
-A replication package for creating, denormalizing, normalizing, and testing the performance of the IMDb database.
-
-# Database normalization
-
-## Description
-
 A replication package for creating, denormalizing, normalizing, and testing the performance of the IMDb database. Note: this might not be replicable in a virtual environment.
 
 ## Replication instructions
