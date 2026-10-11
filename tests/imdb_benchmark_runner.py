@@ -127,13 +127,21 @@ def stop_monitor(process: subprocess.Popen[str]) -> None:
 
 
 def parse_pgbench(text: str) -> dict[str, float | int | None]:
-    transactions = re.search(r"number of transactions actually processed:\s+(\d+)", text)
-    tps = re.findall(r"tps\s*=\s*([0-9.]+)", text)
-    latency = re.findall(r"latency average\s*=\s*([0-9.]+)", text)
+    """Parse workload-wide pgbench summary, excluding per-script statistics.
+
+    pgbench prints the overall summary before the per-script SQL script sections.
+    Missing summary metrics are an error rather than silently recorded as null.
+    """
+    summary = re.split(r"^SQL script\s+\d+:.*$", text, maxsplit=1, flags=re.MULTILINE)[0]
+    transactions = re.search(r"^number of transactions actually processed:\s*(\d+)\s*$", summary, re.MULTILINE)
+    tps = re.search(r"^tps\s*=\s*([0-9]+(?:\.[0-9]+)?)", summary, re.MULTILINE)
+    latency = re.search(r"^latency average\s*=\s*([0-9]+(?:\.[0-9]+)?)", summary, re.MULTILINE)
+    if not all((transactions, tps, latency)):
+        raise ValueError("Missing workload-wide pgbench summary metrics; inspect pgbench_measured.txt")
     return {
-        "transactions": int(transactions.group(1)) if transactions else None,
-        "tps": float(tps[-1]) if tps else None,
-        "latency_ms": float(latency[-1]) if latency else None,
+        "transactions": int(transactions.group(1)),
+        "tps": float(tps.group(1)),
+        "latency_ms": float(latency.group(1)),
     }
 
 
@@ -201,16 +209,10 @@ class NetioCollector:
             if raise_on_error:
                 raise RuntimeError(message) from exc
 
-    def start(self) -> bool:
-        """Start polling and return whether an initial NETIO sample was obtained."""
-        self.sample()
-        with self.lock:
-            available = bool(self.samples)
-        if not available:
-            return False
+    def start(self) -> None:
+        self.sample(raise_on_error=True)
         self.thread = threading.Thread(target=self._poll, name="netio-poller", daemon=True)
         self.thread.start()
-        return True
 
     def live_summary(self) -> dict[str, float | None]:
         """Return the latest load and counter-based energy since this collector started."""
@@ -248,10 +250,7 @@ class NetioCollector:
         summary: dict[str, Any] = {"netio_url": self.url, "netio_socket_id": self.socket_id,
                                    "netio_sample_count": len(samples), "netio_error_count": len(errors)}
         if len(samples) < 2:
-            summary["netio_energy_available"] = False
-            summary["netio_warning"] = "NETIO produced fewer than two samples; energy cannot be computed"
-            return summary
-        summary["netio_energy_available"] = True
+            raise RuntimeError("NETIO produced fewer than two samples; energy cannot be computed")
         def integrate(key: str) -> float | None:
             pairs = [(x["captured_epoch_s"], x[key]) for x in samples if x.get(key) is not None]
             if len(pairs) < 2:
@@ -456,13 +455,8 @@ def main() -> int:
                       "SHOW shared_buffers; SHOW work_mem; SHOW effective_cache_size; SHOW track_io_timing;")
         if args.warmup:
             if args.netio_url:
-                candidate = NetioCollector(args, run_dir, artifact_prefix="warmup_")
-                if candidate.start():
-                    warmup_netio = candidate
-                else:
-                    manifest["warmup_netio"] = candidate.stop()
-                    print(f"[{utc_now()}] Notice: NETIO unavailable; continuing without wall-energy "
-                          "measurement for this run.", flush=True)
+                warmup_netio = NetioCollector(args, run_dir, artifact_prefix="warmup_")
+                warmup_netio.start()
             manifest["warmup_started_utc"] = utc_now()
             print(f"[{manifest['warmup_started_utc']}] Warm-up starting: {args.warmup} s, "
                   f"{args.clients} clients, {args.jobs} jobs.", flush=True)
@@ -484,13 +478,8 @@ def main() -> int:
             start_monitor([args.vmstat, str(args.sample_seconds)], run_dir / "vmstat.txt"),
         ]
         if args.netio_url:
-            candidate = NetioCollector(args, run_dir)
-            if candidate.start():
-                netio = candidate
-            else:
-                manifest["netio"] = candidate.stop()
-                print(f"[{utc_now()}] Notice: NETIO unavailable; continuing without wall-energy "
-                      "measurement for this run.", flush=True)
+            netio = NetioCollector(args, run_dir)
+            netio.start()
         manifest["measurement_started_utc"] = utc_now()
         shell_hook(args.netio_start_command, "start", run_dir, manifest)
         print(f"[{manifest['measurement_started_utc']}] Measured run starting: {args.duration} s. "
