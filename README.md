@@ -207,7 +207,7 @@ sudo chown postgres:postgres /var/lib/postgresql/benchmark/credentials/netio.env
 sudo chmod 600 /var/lib/postgresql/benchmark/credentials/netio.env
 ```
 
-Run one condition as follows. This example measures the 1NF representation with 32 GB VM RAM:
+Run one condition as follows. This example measures the 1NF representation with 32 GB RAM:
 
 ```bash
 sudo -u postgres -H bash -lc '
